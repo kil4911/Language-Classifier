@@ -18,7 +18,7 @@ def train(examples, out_file, learner):
     """
     if learner == "dt":
         model = DecisionModel(train_file=examples, out_file=out_file)
-    else:
+    else:  # "ada"
         model = AdaModel(train_file=examples, out_file=out_file)
 
     model.train()
@@ -50,6 +50,28 @@ def usage(train_msg=True, predict_msg=True):
     exit(1)
 
 
+def cmd():
+    """
+    Runs interactive terminal
+    """
+    model = AdaModel()
+    model.train(5)
+    correct = 0
+    total = 0
+
+    while True:
+        line = input("Enter line to predict or \"Quit\": ")
+        if line == "Quit":
+            break
+        else:
+            model.predict(line)
+            res = input("Did I get it \"Y/N\": ")
+            if res == "Y":
+                correct += 1
+            total += 1
+
+    print("| correct: ", correct, "| total: ", total, "| accuracy:", str((correct / total) * 100) + "%")
+
 def main():
     """
     Main function. Accepts user input.
@@ -63,9 +85,9 @@ def main():
         if len(sys.argv) < 5:
             usage(predict_msg=False)
 
-        examples = sys.argv[2]
-        out_file = sys.argv[3]
-        learner = sys.argv[4]
+        examples = sys.argv[2]  # train.dat
+        out_file = sys.argv[3]  # model
+        learner = sys.argv[4]   # "dt" or "ada"
 
         print("Training...")
         train(examples, out_file, learner)
@@ -75,11 +97,12 @@ def main():
         if len(sys.argv) < 4:
             usage(train_msg=False)
 
-        h_file = sys.argv[2]
-        test_file = sys.argv[3]
+        h_file = sys.argv[2]   # model
+        test_file = sys.argv[3]  # test.dat
 
         predict(h_file, test_file)
 
 
 if __name__ == '__main__':
     main()
+    #cmd()

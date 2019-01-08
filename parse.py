@@ -13,7 +13,7 @@ def parse(files):
     for i in range(len(files)):
         filename = files[i]
 
-        for line in open(filename):
+        for line in open(filename, encoding="utf8"):
             if not len(line.strip()) > 3:
                 continue
 
